@@ -89,7 +89,14 @@ pub fn flush() {
             }
         }
 
-        #[cfg(not(target_family = "wasm"))]
+        #[cfg(all(not(target_family = "wasm"), feature = "native-collect"))]
+        {
+            if let Some(collector) = GLOBAL_COLLECTOR.lock().as_mut() {
+                collector.handle_commands();
+            }
+        }
+
+        #[cfg(all(not(target_family = "wasm"), not(feature = "native-collect")))]
         {
             // Spawns a new thread to ensure the reporter operates outside the tokio runtime to
             // prevent panic.
