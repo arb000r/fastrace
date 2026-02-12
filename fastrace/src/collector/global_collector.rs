@@ -92,7 +92,6 @@ pub fn flush() {
         #[cfg(all(not(target_family = "wasm"), feature = "native-collect"))]
         {
             if let Some(collector) = GLOBAL_COLLECTOR.lock().as_mut() {
-                println!("Flushing on same thrad.");
                 collector.handle_commands();
             }
         }
